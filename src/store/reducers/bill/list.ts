@@ -52,8 +52,14 @@ const billListReducer = createReducer(INIT_STATE, {
 		}
 	},
 	[transactionToBillSuccess.type]: (state, action) => {
-		const transaction = state.transactions.find((item) => item.id === action.payload);
+		let transaction = state.transactions.find((item) => item.id === action.payload);
 		const transactions = state.transactions.filter((item) => item.id !== action.payload);
+		if (transaction) {
+			transaction = {
+				...transaction,
+				isBill: true,
+			}
+		}
 		const bills = [...state.bills, transaction];
 		
 		return {

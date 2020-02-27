@@ -4,6 +4,7 @@ import { BillListItemProps } from './types';
 import { BillListItemWrapper } from './styles';
 import BillListItemTransactions from './BillListItemTransaction';
 import Icon from 'antd/lib/icon';
+import { Button } from 'antd';
 
 const BillListItem: React.FunctionComponent<BillListItemProps> = (props) => {
 	const { bill, onRemoveBill, onTransactionToBill } = props;
@@ -35,17 +36,25 @@ const BillListItem: React.FunctionComponent<BillListItemProps> = (props) => {
 				</a>}
 			style={{ width: 400 }}
 			actions={bill.isBill ? [
-				<Icon
-					onClick={onRemoveBillCallback}
-					type="delete"
-					key="delete"
-				/>,
+				<Button
+					type="danger" 
+					onClick={onRemoveBillCallback}>
+					Delete
+					<Icon
+						type="delete"
+						key="delete"
+					/>
+				</Button>,
 			]: [
-				<Icon
-					onClick={onTransactionToBillCallback}
-					type="copy"
-					key="copy"
-				/>
+				<Button
+					type="primary" 
+					onClick={onTransactionToBillCallback}>
+					Add as bill
+					<Icon
+						type="copy"
+						key="copy"
+					/>
+				</Button>
 			]}
 		>
 			{isShowTransactions && <BillListItemTransactions transactions={transactions}/>}
