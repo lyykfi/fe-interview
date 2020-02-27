@@ -10,3 +10,13 @@ export const fetchBillsRequest = async () => {
 		throw(e);
 	}
 }
+
+export const removeBillByIdRequest = async (id: string) => {
+	try {
+		await fetch(`${API_PATH}/bills/${id}`, {
+			method: 'PATCH',
+		});
+	} catch(e) {
+		throw(e);
+	}
+}

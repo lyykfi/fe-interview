@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { BillListReducer, Bill } from './types';
-import { fetchBillStart, fetchBillSuccess } from "store/actions/bill";
+import { fetchBillStart, fetchBillSuccess, deleteBillSuccess, transactionToBillSuccess } from "store/actions/bill";
 
 const separateBillsAndTransactions = (data: Bill[]) => {
 	const bills: Bill[] = [];
@@ -42,7 +42,26 @@ const billListReducer = createReducer(INIT_STATE, {
 			isLoading: false,
 			isLoaded: true,
 		}
-	}
+	},
+	[deleteBillSuccess.type]: (state, action) => {
+		const bills = state.bills.filter((item) => item.id !== action.payload);
+
+		return {
+			...state,
+			bills,
+		}
+	},
+	[transactionToBillSuccess.type]: (state, action) => {
+		const transaction = state.transactions.find((item) => item.id === action.payload);
+		const transactions = state.transactions.filter((item) => item.id !== action.payload);
+		const bills = [...state.bills, transaction];
+		
+		return {
+			...state,
+			bills: bills as any,
+			transactions: [...transactions],
+		}
+	},
 })
 
 export default billListReducer;

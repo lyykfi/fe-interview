@@ -6,4 +6,6 @@ export interface BillListContainerProps {
 
 export interface BillListProps {
 	bills: Bill[];
+	onRemoveBill: (id: string) => void;
+	onTransactionToBill: (id: string) => void;
 }

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { BillListContainerProps } from './types';
 import { getBillLoadingState, getBills, getTransactions } from 'store/selectors/bill';
-import { fetchBills } from 'store/actions/bill';
+import { fetchBills, removeBillById, transactionToBill } from 'store/actions/bill';
 import BillList from './index';
 
 const BillListContainer: React.FunctionComponent<BillListContainerProps> = (
@@ -14,6 +14,14 @@ const BillListContainer: React.FunctionComponent<BillListContainerProps> = (
 	const bills = useSelector(getBills);
 	const transactions = useSelector(getTransactions);
 
+	const onRemoveBill = useCallback((id: string) => {
+		dispath(removeBillById(id));
+	}, [dispath]);
+
+	const onTransactionToBill = useCallback((id: string) => {
+		dispath(transactionToBill(id));
+	}, [dispath]);
+
 	useEffect(() => {
 		if (!isLoaded) {
 			dispath(fetchBills());
@@ -22,9 +30,10 @@ const BillListContainer: React.FunctionComponent<BillListContainerProps> = (
 
 	const items = props.isBill ? bills : transactions;
 
-	console.log(items);
-
-	return <BillList bills={items} />;
+	return <BillList
+		bills={items}
+		onRemoveBill={onRemoveBill}
+		onTransactionToBill={onTransactionToBill} />;
 }
 
 export default BillListContainer;
